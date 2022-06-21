@@ -3,7 +3,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait 
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException 
-from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 from tempfile import mkdtemp
 import pandas as pd
@@ -15,7 +14,7 @@ def lambda_handler(event, context):
     options = webdriver.ChromeOptions()
     options.binary_location = '/opt/chrome/chrome'
     options.add_argument("--window-size=1920,1080")
-    options.add_argument("--start-maximized")
+    #options.add_argument("--start-maximized")
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     options.add_argument("--disable-gpu")
@@ -43,13 +42,13 @@ def lambda_handler(event, context):
 
 #1. Select checkbox AWS Solutions
     time.sleep(3)
-    is_present = driver.find_elements_by_xpath("/html/body/div[1]/div/div[1]/div/div/div/div/button[2]")
-    if len(is_present)>0:
-        driver.find_element_by_xpath("/html/body/div[1]/div/div[1]/div/div/div/div/button[2]").click()
-        time.sleep(2)
-
-    driver.find_element_by_xpath("/html/body/div[2]/main/div[4]/div[1]/div[2]/div[2]/div/div[2]/div/div[1]/input").click()
-
+    try:
+        element = WebDriverWait(driver,20).until(EC.presence_of_element_located((By.XPATH,"/html/body/div[1]/div/div[1]/div/div/div/div/button[2]")))
+        element.click()
+    except:
+        print("Error")
+    element_1 = WebDriverWait(driver,20).until(EC.presence_of_element_located((By.XPATH,"/html/body/div[2]/main/div[4]/div[1]/div[2]/div[2]/div/div[2]/div/div[1]/input")))
+    element_1.click()
     #For each technology checkbox, take the title loop through the different cards
     #tech_category_checkboxes_group = driver.find_elements_by_css_selector("input[data-key='tech-category']")
     tech_category_checkboxes_group = driver.find_elements_by_class_name("lb-checkbox")
@@ -135,3 +134,4 @@ def lambda_handler(event, context):
     #grant s3 permissions to Lambda
     #take in parameters upon cdk dpeloy for s3 bucket name and object name
     #create ECR repository
+    #lambda needs to be 15 minute timeout and 1000mb in storage
