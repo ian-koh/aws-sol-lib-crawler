@@ -14,7 +14,7 @@ def lambda_handler(event, context):
     options = webdriver.ChromeOptions()
     options.binary_location = '/opt/chrome/chrome'
     options.add_argument("--window-size=1920,1080")
-    #options.add_argument("--start-maximized")
+    options.add_argument("--start-maximized")
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     options.add_argument("--disable-gpu")
@@ -84,7 +84,7 @@ def lambda_handler(event, context):
             #Click on Resources & FAQ
             #driver.implicitly_wait(1)
             #If resources and FAQ path exists
-            is_present = driver.find_elements_by_xpath("/html/body/header/div[3]/div/div/div[2]/a[2]")
+            #is_present = driver.find_elements_by_xpath("/html/body/header/div[3]/div/div/div[2]/a[2]")
             time.sleep(1)
             if check_exists_by_xpath("/html/body/header/div[3]/div/div/div[2]/a[2]"):
                 driver.find_element_by_xpath("/html/body/header/div[3]/div/div/div[2]/a[2]").click()
